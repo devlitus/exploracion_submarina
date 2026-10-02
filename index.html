@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#061b2a" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ctext y=%2724%27 font-size=%2726%27 fill=%27%235ef2d0%27%3E✳%3C/text%3E%3C/svg%3E" />
+    <title>PELAGIA — Exploración submarina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="world" aria-label="Mundo submarino en tres dimensiones"></canvas>
+      <div class="vignette"></div><div class="surface-glow"></div>
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark">✳</span><span>PELAGIA <small>EXPEDICIÓN 01</small></span></div>
+        <div class="top-center"><span class="live-dot"></span> EXPLORACIÓN EN CURSO <span class="top-divider"></span> <span id="biome">ARRECIFE CREPUSCULAR</span></div>
+        <button class="icon-button" id="help-button" title="Controles" aria-label="Mostrar controles">?</button>
+      </header>
+      <aside class="depth-panel glass">
+        <div class="panel-eyebrow">TELEMETRÍA / 01</div>
+        <div class="depth-main"><span id="depth-value">18</span><span class="depth-unit">m<br><small>PROFUNDIDAD</small></span></div>
+        <div class="gauge"><div class="gauge-fill" id="depth-fill"></div><span class="gauge-marker" id="depth-marker"></span></div>
+        <div class="gauge-labels"><span>SUPERFICIE</span><span>200 m</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><span>VELOCIDAD</span><strong id="speed-value">0.0 <small>nudos</small></strong></div>
+        <div class="stat-row"><span>RUMBO</span><strong id="heading-value">000° N</strong></div>
+        <div class="stat-row"><span>ALTURA AL FONDO</span><strong id="floor-value">-- m</strong></div>
+        <div class="stat-row"><span>PRESIÓN</span><strong id="pressure-value">1.0 <small>bar</small></strong></div>
+        <div class="stat-row"><span>AGUA</span><strong id="temp-value">22 <small>°C</small></strong></div>
+        <div class="stat-divider"></div>
+        <div class="bar-row"><span>BATERÍA</span><strong id="battery-value">100%</strong><div class="bar"><i id="battery-bar"></i></div></div>
+        <div class="bar-row"><span>OXÍGENO</span><strong id="o2-value">100%</strong><div class="bar"><i id="o2-bar"></i></div></div>
+        <div class="bar-row"><span>CASCO</span><strong id="hull-value">100%</strong><div class="bar"><i id="hull-bar"></i></div></div>
+        <div class="bar-row"><span>LASTRE</span><strong id="ballast-value">92%</strong><div class="bar"><i id="ballast-bar"></i></div></div>
+        <div class="stat-row"><span>CONSUMO</span><strong id="power-value">0.0 <small>kW</small></strong></div>
+        <div class="stat-divider"></div>
+        <div class="status-row" id="status-row"><span class="status-dot"></span><span id="status-text">SISTEMAS NOMINALES</span></div>
+      </aside>
+      <aside class="mission-panel glass">
+        <div class="panel-eyebrow">DIARIO DE MISIÓN / 02</div>
+        <h2>La inmensidad<br>desconocida<span>.</span></h2>
+        <p>Explora las profundidades, descubre lugares singulares y deja que el sonar revele lo que oculta el azul.</p>
+        <div class="mission-divider"></div>
+        <div class="mission-title"><span>DESCUBRIMIENTOS</span><strong id="discovery-count">0 / 20</strong></div>
+        <div id="discovery-list"></div>
+      </aside>
+      <div class="compass-wrap"><div class="compass" id="compass"><span>O</span><span>NO</span><span>N</span><span>NE</span><span>E</span></div><div class="compass-needle">◆</div></div>
+      <div class="bottom-left glass"><div class="mini-map-head"><span>SONAR LOCAL</span><span id="coords">00° 00′ N · 00° 00′ E</span></div><canvas id="minimap" width="220" height="156" aria-label="Mapa de sonar"></canvas><div class="map-foot"><span><i class="map-key"></i> TU POSICIÓN</span><span>RADIO 180 m</span></div></div>
+      <div class="bottom-center"><div class="hint-line"><span class="key" data-k="KeyW">W</span><span class="key" data-k="KeyS">S</span> PROPULSIÓN <span class="hint-sep">·</span> <span class="key" data-k="KeyA">A</span><span class="key" data-k="KeyD">D</span> DIRECCIÓN <span class="hint-sep">·</span> <span class="depth-keys"><span class="key wide" data-k="Space">ESPACIO</span> <b class="up">▲ SUBIR</b> <span class="key wide" data-k="ShiftLeft ShiftRight">SHIFT</span> <b class="down">▼ BAJAR</b></span> <span class="hint-sep">·</span> <span class="key" data-k="ArrowUp">↑</span><span class="key" data-k="ArrowDown">↓</span> INCLINAR MORRO</div><div class="hint-line secondary"><span class="key">E</span> PULSO SONAR <span class="hint-sep">·</span> <span class="key">F</span> FOCOS <span class="hint-sep">·</span> <span class="key">V</span> CÁMARA <span class="hint-sep">·</span> <span class="key">Z</span><span class="key">X</span> LASTRE <span class="hint-sep">·</span> ARRASTRA PARA MIRAR</div></div>
+      <div class="bottom-right"><button id="sonar-button" class="sonar-button"><span class="sonar-icon">◉</span><span><strong>EMITIR SONAR</strong><small>TECLA E</small></span><span class="sonar-arrow">↗</span></button><div id="sonar-cooldown"></div></div>
+      <div id="toast" class="toast" role="status"></div>
+      <div id="intro" class="intro"><div class="intro-noise"></div><div class="intro-content"><div class="intro-kicker"><span class="live-dot"></span> UNA EXPEDICIÓN INTERACTIVA</div><div class="intro-symbol">✳</div><h1>Donde termina<br>la <em>luz.</em></h1><p>Pilota un minisubmarino en un océano abierto. Sigue las luces, escucha el sonar y descubre lo que vive bajo la superficie.</p><button id="start-button" class="start-button">COMENZAR EXPEDICIÓN <span>↗</span></button><div class="intro-controls">WASD PARA PILOTAR <span>·</span> ESPACIO SUBIR / SHIFT BAJAR <span>·</span> E PARA SONAR</div></div><div class="intro-side">PELAGIA<br>37° 42′ N<br>12° 18′ O<br><br>PROFUNDIDAD<br>VARIABLE</div></div>
+      <div id="help" class="help hidden"><div class="help-card glass"><button id="close-help" class="close-help" aria-label="Cerrar">×</button><div class="panel-eyebrow">MANUAL DE VUELO</div><h2>Controles</h2><div class="help-grid"><span>W / S</span><span>Avanzar / retroceder</span><span>A / D</span><span>Girar a izquierda / derecha</span><span>ESPACIO / SHIFT</span><span>▲ Subir / ▼ Bajar (toberas verticales)</span><span>E</span><span>Emitir pulso sonar</span><span>F</span><span>Encender / apagar focos</span><span>V</span><span>Cambiar cámara</span><span>↑ / ↓</span><span>Inclinar el morro arriba / abajo (no cambia la profundidad estando parado)</span><span>Z / X</span><span>Inundar / soplar tanques de lastre</span><span>RATÓN / RUEDA</span><span>Mirar alrededor / acercar</span></div><p>Física realista: flotabilidad (Arquímedes), resistencia cuadrática, masa añadida, corrientes, presión y consumo eléctrico. Los planos y el timón solo actúan con velocidad; las toberas verticales funcionan parado. Sube a superficie para recargar batería y oxígeno. Los rojos desaparecen primero con la profundidad: enciende los focos.</p></div></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
